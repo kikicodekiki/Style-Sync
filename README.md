@@ -6,16 +6,79 @@ StyleSync is a GenAI-powered web application that helps users manage a digital w
 
 ```
 Style-Sync/
-├── frontend/          # React frontend application
+├── frontend/              # React frontend application
 │   ├── src/
 │   │   ├── components/    # Reusable UI components
 │   │   ├── pages/         # Page components
 │   │   ├── hooks/         # Custom React hooks
 │   │   ├── services/      # API service layer
 │   │   └── context/       # React Context providers
-│   └── README.md       # Frontend-specific documentation
-└── README.md          # This file
+│   └── README.md          # Frontend-specific documentation
+├── backend/               # Python Flask API backend
+│   ├── app/
+│   │   ├── agents/        # AI agents (VAA, SRA, Feedback)
+│   │   ├── api/           # REST API controllers
+│   │   ├── models/        # SQLAlchemy database models
+│   │   └── services/      # Business logic layer
+│   ├── uploads/           # Uploaded clothing images
+│   ├── feedback_data/     # RL training signal JSON files
+│   ├── requirements.txt
+│   └── run.py
+└── README.md              # This file
 ```
+
+## Backend Setup
+
+### Prerequisites
+
+- Python 3.9+
+- [Ollama](https://ollama.ai) with `llama3.2` model (for AI recommendations)
+- OpenWeatherMap API key (optional, has mock fallback)
+
+### Quick Start
+
+1. Navigate to the backend directory:
+```bash
+cd backend
+```
+
+2. Create and activate a virtual environment:
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your API keys
+```
+
+5. Install and start Ollama with LLaMA:
+```bash
+# Install Ollama from https://ollama.ai
+ollama pull llama3.2
+ollama serve  # Runs on localhost:11434
+```
+
+6. Start the Flask server:
+```bash
+python run.py
+```
+The API will be available at `http://localhost:8000`.
+
+### AI Agents
+
+| Agent | Purpose | AI Model |
+|-------|---------|----------|
+| **Vision Analysis Agent (VAA)** | Classifies clothing images (category, color, style) | YOLOv8 + ColorThief + LLaMA |
+| **Styling Recommendation Agent (SRA)** | Generates outfit recommendations | LLaMA via Ollama |
+| **Feedback Agent (FA)** | Processes user feedback into RL training signals | Rule-based + JSON signals |
 
 ## Frontend Setup
 
@@ -65,12 +128,21 @@ The frontend interfaces with a 3-layer REST API architecture. Ensure your backen
 
 ## Tech Stack
 
+**Frontend:**
 - React 18 with Vite
 - React Router for navigation
 - TanStack Query for data fetching
 - Tailwind CSS for styling
 - Axios for API calls
 - Lucide React for icons
+
+**Backend:**
+- Python Flask with SQLAlchemy (SQLite)
+- Flask-JWT-Extended for authentication
+- LLaMA 3.2 via Ollama for outfit generation
+- YOLOv8 (ultralytics) for clothing detection
+- ColorThief for dominant color extraction
+- OpenWeatherMap API for weather data
 
 ## Contributing
 
