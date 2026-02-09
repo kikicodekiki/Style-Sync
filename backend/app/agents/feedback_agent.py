@@ -61,7 +61,7 @@ class FeedbackAgent:
             'user_id': user_id,
             'outfit_id': outfit.id,
             'reaction': reaction,
-            'timestamp': datetime.utcnow().isoformat(),
+            'timestamp': datetime.now().isoformat(),
             'occasion': outfit.occasion,
             'color_combination': {
                 'top_colors': top.get_dominant_colors() if top else [],
@@ -81,7 +81,7 @@ class FeedbackAgent:
 
     def _write_training_signal_file(self, training_signal):
         """Write training signal to JSON file for the SRA incremental training."""
-        timestamp = datetime.utcnow().strftime('%Y%m%d_%H%M%S_%f')
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         filename = f"training_signal_{training_signal['user_id']}_{timestamp}.json"
         filepath = os.path.join(self.feedback_dir, filename)
 

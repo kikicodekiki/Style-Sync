@@ -52,7 +52,11 @@ class WardrobeService:
             filename = secure_filename(unique_name)
             image_path = os.path.join(upload_folder, filename)
             file.save(image_path)
-            image_url = f"/uploads/{filename}"
+            # Generate full URL for frontend to access
+            from flask import request
+            scheme = request.scheme
+            host = request.host  # includes port if non-standard
+            image_url = f"{scheme}://{host}/uploads/{filename}"
 
         # Use VAA to analyze the image
         user_metadata = {
